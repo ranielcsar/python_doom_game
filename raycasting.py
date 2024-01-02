@@ -8,60 +8,70 @@ class RayCasting:
         self.game = game
 
     def ray_cast(self):
-        ox, oy = self.game.player.position
-        x_map, y_map = self.game.player.map_position
+        player_x_pos, player_y_pos = self.game.player.position
+        player_x_map, player_y_map = self.game.player.map_position
 
-        ray_angle = self.game.player.angle - HALF_FOV + 0.0001
-        for ray in range(NUM_RAYS):
+        ray_angle = self.game.player.angle - HALF_FIELD_OF_VIEW + 0.0001
+        for _ in range(NUM_RAYS):
             sin_a = math.sin(ray_angle)
             cos_a = math.cos(ray_angle)
 
             # horizontals
-            y_hor, dy = (y_map + 1, 1) if sin_a > 0 else (y_map - 1e-6, -1)
+            h_intersection_coord_y, delta_y = (
+                (player_y_map + 1, 1) if sin_a > 0 else (player_y_map - 1e-6, -1)
+            )
 
-            depth_hor = (y_hor - oy) / sin_a
-            x_hor = ox + depth_hor * cos_a
+            h_depth = (h_intersection_coord_y - player_y_pos) / sin_a
+            h_intersection_coord_x = player_x_pos + h_depth * cos_a
 
-            delta_depth = dy / sin_a
-            dx = delta_depth * cos_a
+            delta_depth = delta_y / sin_a
+            delta_x = delta_depth * cos_a
 
             for i in range(MAX_DEPTH):
-                tile_hor = int(x_hor), int(y_hor)
-                if tile_hor in self.game.map.world_map:
+                vertical_block = int(h_intersection_coord_x), int(
+                    h_intersection_coord_y
+                )
+                if vertical_block in self.game.map.world_map:
                     break
-                x_hor += dx
-                y_hor += dy
-                depth_hor += delta_depth
+
+                h_intersection_coord_x += delta_x
+                h_intersection_coord_y += delta_y
+                h_depth += delta_depth
 
             # verticals
-            x_vert, dx = (x_map + 1, 1) if cos_a > 0 else (x_map - 1e-6, -1)
+            v_intersection_coord_x, delta_x = (
+                (player_x_map + 1, 1) if cos_a > 0 else (player_x_map - 1e-6, -1)
+            )
 
-            depth_vert = (x_vert - ox) / cos_a
-            y_vert = oy + depth_vert * sin_a
+            v_depth = (v_intersection_coord_x - player_x_pos) / cos_a
+            v_intersection_coord_y = player_y_pos + v_depth * sin_a
 
-            delta_depth = dx / cos_a
-            dy = sin_a * delta_depth
+            delta_depth = delta_x / cos_a
+            delta_y = sin_a * delta_depth
 
             for i in range(MAX_DEPTH):
-                tile_vert = int(x_vert), int(y_vert)
-                if tile_vert in self.game.map.world_map:
+                vertical_block = int(v_intersection_coord_x), int(
+                    v_intersection_coord_y
+                )
+                if vertical_block in self.game.map.world_map:
                     break
-                x_vert += dx
-                y_vert += dy
-                depth_vert += delta_depth
+
+                v_intersection_coord_x += delta_x
+                v_intersection_coord_y += delta_y
+                v_depth += delta_depth
 
             # depth
-            if depth_vert < depth_hor:
-                depth = depth_vert
-            else:
-                depth = depth_hor
+            depth = min(v_depth, h_depth)
 
             # projection
             pg.draw.line(
                 self.game.screen,
                 "yellow",
-                (100 * ox, 100 * oy),
-                (100 * ox + 100 * depth * cos_a, 100 * oy + 100 * depth * sin_a),
+                (100 * player_x_pos, 100 * player_y_pos),
+                (
+                    100 * player_x_pos + 100 * depth * cos_a,
+                    100 * player_y_pos + 100 * depth * sin_a,
+                ),
                 2,
             )
 

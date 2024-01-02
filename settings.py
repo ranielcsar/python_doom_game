@@ -10,10 +10,9 @@ PLAYER_ROTATION_SPEED = 0.002
 
 # RAYCASTING
 
-# FOV is the field of view of the player
-FOV = math.pi / 3
-HALF_FOV = FOV / 2
+FIELD_OF_VIEW = math.pi / 3
+HALF_FIELD_OF_VIEW = FIELD_OF_VIEW / 2
 NUM_RAYS = WIDTH // 2  # // stands for integer division
 HALF_NUM_RAYS = NUM_RAYS // 2
-DELTA_ANGLE = FOV / NUM_RAYS
+DELTA_ANGLE = FIELD_OF_VIEW / NUM_RAYS
 MAX_DEPTH = 20
