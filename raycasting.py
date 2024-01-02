@@ -12,7 +12,7 @@ class RayCasting:
         player_x_map, player_y_map = self.game.player.map_position
 
         ray_angle = self.game.player.angle - HALF_FIELD_OF_VIEW + 0.0001
-        for _ in range(NUM_RAYS):
+        for ray in range(NUM_RAYS):
             sin_a = math.sin(ray_angle)
             cos_a = math.cos(ray_angle)
 
@@ -63,16 +63,23 @@ class RayCasting:
             # depth
             depth = min(v_depth, h_depth)
 
+            # remove fishbowl effect
+            depth *= math.cos(self.game.player.angle - ray_angle)
+
             # projection
-            pg.draw.line(
+            projection_height = SCREEN_DISTANCE / (depth + 0.0001)
+
+            # draw walls
+            color = [255 / (1 + depth**5 * 0.00002)] * 3
+            pg.draw.rect(
                 self.game.screen,
-                "yellow",
-                (100 * player_x_pos, 100 * player_y_pos),
+                color,
                 (
-                    100 * player_x_pos + 100 * depth * cos_a,
-                    100 * player_y_pos + 100 * depth * sin_a,
+                    ray * SCALE,
+                    HALF_HEIGHT - projection_height // 2,
+                    SCALE,
+                    projection_height,
                 ),
-                2,
             )
 
             ray_angle += DELTA_ANGLE
