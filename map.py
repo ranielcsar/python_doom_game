@@ -1,4 +1,5 @@
 import pygame as pg
+from game_types import GameType
 
 _ = False
 mini_map = [
@@ -15,7 +16,7 @@ mini_map = [
 
 
 class Map:
-    def __init__(self, game):
+    def __init__(self, game: GameType):
         self.game = game
         self.mini_map = mini_map
         self.world_map = {}

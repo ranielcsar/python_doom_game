@@ -1,10 +1,11 @@
 from settings import *
 import pygame as pg
 import math
+from game_types import GameType
 
 
 class Player:
-    def __init__(self, game):
+    def __init__(self, game: GameType):
         self.game = game
         self.x, self.y = PLAYER_POSITION
         self.angle = PLAYER_ANGLE
@@ -12,26 +13,26 @@ class Player:
     def movement(self):
         sin_a = math.sin(self.angle)
         cos_a = math.cos(self.angle)
-        dx, dy = 0, 0
+        delta_x, delta_y = 0, 0
         speed = PLAYER_SPEED * self.game.delta_time
         speed_sin = speed * sin_a
         speed_cos = speed * cos_a
 
         keys = pg.key.get_pressed()
         if keys[pg.K_w]:
-            dx += speed_cos
-            dy += speed_sin
+            delta_x += speed_cos
+            delta_y += speed_sin
         if keys[pg.K_s]:
-            dx += -speed_cos
-            dy += -speed_sin
+            delta_x += -speed_cos
+            delta_y += -speed_sin
         if keys[pg.K_a]:
-            dx += speed_sin
-            dy += -speed_cos
+            delta_x += speed_sin
+            delta_y += -speed_cos
         if keys[pg.K_d]:
-            dx += -speed_sin
-            dy += speed_cos
+            delta_x += -speed_sin
+            delta_y += speed_cos
 
-        self.check_wall_collision(dx, dy)
+        self.check_wall_collision(delta_x, delta_y)
 
         if keys[pg.K_LEFT]:
             self.angle -= PLAYER_ROTATION_SPEED * self.game.delta_time
@@ -43,11 +44,11 @@ class Player:
     def check_wall(self, x, y):
         return (x, y) not in self.game.map.world_map
 
-    def check_wall_collision(self, dx, dy):
-        if self.check_wall(int(self.x + dx), int(self.y)):
-            self.x += dx
-        if self.check_wall(int(self.x), int(self.y + dy)):
-            self.y += dy
+    def check_wall_collision(self, delta_x, delta_y):
+        if self.check_wall(int(self.x + delta_x), int(self.y)):
+            self.x += delta_x
+        if self.check_wall(int(self.x), int(self.y + delta_y)):
+            self.y += delta_y
 
     def draw(self):
         # pg.draw.line(

@@ -1,10 +1,11 @@
 import pygame as pg
 import math
 from settings import *
+from game_types import GameType
 
 
 class RayCasting:
-    def __init__(self, game):
+    def __init__(self, game: GameType):
         self.game = game
 
     def ray_cast(self):
