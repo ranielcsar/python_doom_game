@@ -10,6 +10,14 @@ class Player:
         self.x, self.y = PLAYER_POSITION
         self.angle = PLAYER_ANGLE
         self.relative_movement = 0
+        self.shot = False
+
+    def single_fire_event(self, event):
+        if event.type == pg.MOUSEBUTTONDOWN:
+            if event.button == 1 and not self.shot and not self.game.weapon.reloading:
+                self.game.sound.shotgun.play()
+                self.shot = True
+                self.game.weapon.reloading = True
 
     def movement(self):
         sin_a = math.sin(self.angle)
@@ -34,11 +42,6 @@ class Player:
             delta_y += speed_cos
 
         self.check_wall_collision(delta_x, delta_y)
-
-        # if keys[pg.K_LEFT]:
-        #     self.angle -= PLAYER_ROTATION_SPEED * self.game.delta_time
-        # if keys[pg.K_RIGHT]:
-        #     self.angle += PLAYER_ROTATION_SPEED * self.game.delta_time
 
         self.angle %= math.tau  # 2 pi
 
