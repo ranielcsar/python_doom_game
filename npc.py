@@ -31,6 +31,7 @@ class NPC(AnimatedSprite):
         self.pain = False
         self.is_seeing_player = False
         self.frame_counter = 0
+        self.player_search_trigger = False
 
     def update(self):
         self.check_animation_time()
@@ -48,12 +49,23 @@ class NPC(AnimatedSprite):
             self.y += delta_y
 
     def movement(self):
-        next_position = self.game.player.map_position
+        next_position = self.game.path_finding.get_path(
+            self.map_position, self.game.player.map_position
+        )
         next_x, next_y = next_position
-        angle = math.atan2(next_y + 0.5 - self.y, next_x + 0.5 - self.x)
-        delta_x = math.cos(angle) * self.speed
-        delta_y = math.sin(angle) * self.speed
-        self.check_wall_collision(delta_x, delta_y)
+
+        if next_position not in self.game.object_handler.npc_positions:
+            angle = math.atan2(next_y + 0.5 - self.y, next_x + 0.5 - self.x)
+            delta_x = math.cos(angle) * self.speed
+            delta_y = math.sin(angle) * self.speed
+            self.check_wall_collision(delta_x, delta_y)
+
+    def attack(self):
+        if self.animation_trigger:
+            self.game.sound.npc_attack.play()
+
+            if random() < self.accuracy:
+                self.game.player.get_damage(self.attack_damage)
 
     def animate_death(self):
         if not self.alive:
@@ -98,6 +110,16 @@ class NPC(AnimatedSprite):
                 self.animate_pain()
 
             elif self.is_seeing_player:
+                self.player_search_trigger = True
+
+                if self.distance < self.attack_distance:
+                    self.animate(self.attack_images)
+                    self.attack()
+                else:
+                    self.animate(self.walk_images)
+                    self.movement()
+
+            elif self.player_search_trigger:
                 self.animate(self.walk_images)
                 self.movement()
 
