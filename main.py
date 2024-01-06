@@ -8,13 +8,14 @@ from raycasting import *
 from object_handler import *
 from weapon import *
 from sound import *
+from path_finding import *
 
 
 class Game:
     def __init__(self):
         pg.init()
         pg.mouse.set_visible(False)
-        self.screen = pg.display.set_mode(RES)
+        self.screen = pg.display.set_mode(RESOLUTION)
         self.clock = pg.time.Clock()
         self.delta_time = 1
         self.global_trigger = False
@@ -30,6 +31,7 @@ class Game:
         self.object_handler = ObjectHandler(self)
         self.weapon = Weapon(self)
         self.sound = Sound(self)
+        self.path_finding = PathFinding(self)
 
     def update(self):
         self.player.update()
