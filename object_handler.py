@@ -5,8 +5,8 @@ from npc import *
 class ObjectHandler:
     def __init__(self, game: GameType):
         self.game = game
-        self.sprite_list = []
-        self.npc_list = []
+        self.sprite_list: list[SpriteObject] = []
+        self.npc_list: list[NPC] = []
         self.npc_sprite_path = "resources/sprites/npc/"
         self.static_sprite_path = "resources/sprites/static_sprites/"
         self.animated_sprite_path = "resources/sprites/animated_sprites/"
