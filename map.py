@@ -1,5 +1,6 @@
 import pygame as pg
 from game_types import GameType
+from settings import PIXEL_SIZE
 
 _ = False
 mini_map = [
@@ -31,7 +32,15 @@ class Map:
     def draw(self):
         [
             pg.draw.rect(
-                self.game.screen, "darkgray", (pos[0] * 100, pos[1] * 100, 100, 100), 2
+                self.game.screen,
+                "darkgray",
+                (
+                    position[0] * PIXEL_SIZE,
+                    position[1] * PIXEL_SIZE,
+                    PIXEL_SIZE,
+                    PIXEL_SIZE,
+                ),
+                2,
             )
-            for pos in self.world_map
+            for position in self.world_map
         ]
