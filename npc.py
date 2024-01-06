@@ -29,7 +29,7 @@ class NPC(AnimatedSprite):
         self.accuracy = 0.15
         self.alive = True
         self.pain = False
-        self.ray_cast_value = False
+        self.is_seeing_player = False
         self.frame_counter = 0
 
     def update(self):
@@ -37,6 +37,23 @@ class NPC(AnimatedSprite):
         self.get_sprites()
         self.run_logic()
         # self.draw_ray_cast()
+
+    def check_wall(self, x, y):
+        return (x, y) not in self.game.map.world_map
+
+    def check_wall_collision(self, delta_x, delta_y):
+        if self.check_wall(int(self.x + delta_x * self.size), int(self.y)):
+            self.x += delta_x
+        if self.check_wall(int(self.x), int(self.y + delta_y * self.size)):
+            self.y += delta_y
+
+    def movement(self):
+        next_position = self.game.player.map_position
+        next_x, next_y = next_position
+        angle = math.atan2(next_y + 0.5 - self.y, next_x + 0.5 - self.x)
+        delta_x = math.cos(angle) * self.speed
+        delta_y = math.sin(angle) * self.speed
+        self.check_wall_collision(delta_x, delta_y)
 
     def animate_death(self):
         if not self.alive:
@@ -55,7 +72,7 @@ class NPC(AnimatedSprite):
             self.pain = False
 
     def check_hit_in_npc(self):
-        if self.ray_cast_value and self.game.player.shot:
+        if self.is_seeing_player and self.game.player.shot:
             if (
                 HALF_WIDTH - self.sprite_half_width
                 < self.screen_x
@@ -74,11 +91,16 @@ class NPC(AnimatedSprite):
 
     def run_logic(self):
         if self.alive:
-            self.ray_cast_value = self.ray_cast_player_npc()
+            self.is_seeing_player = self.ray_cast_player_npc()
             self.check_hit_in_npc()
 
             if self.pain:
                 self.animate_pain()
+
+            elif self.is_seeing_player:
+                self.animate(self.walk_images)
+                self.movement()
+
             else:
                 self.animate(self.idle_images)
         else:
