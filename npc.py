@@ -159,8 +159,9 @@ class NPC(AnimatedSprite):
         delta_depth = delta_y / sin_a
         delta_x = delta_depth * cos_a
 
-        for i in range(MAX_DEPTH):
-            vertical_block = int(h_intersection_coord_x), int(h_intersection_coord_y)
+        for _ in range(MAX_DEPTH):
+            vertical_block = int(h_intersection_coord_x), int(
+                h_intersection_coord_y)
 
             if vertical_block == self.map_position:
                 player_distance_horizontal = h_depth
@@ -184,8 +185,9 @@ class NPC(AnimatedSprite):
         delta_depth = delta_x / cos_a
         delta_y = sin_a * delta_depth
 
-        for i in range(MAX_DEPTH):
-            vertical_block = int(v_intersection_coord_x), int(v_intersection_coord_y)
+        for _ in range(MAX_DEPTH):
+            vertical_block = int(v_intersection_coord_x), int(
+                v_intersection_coord_y)
 
             if vertical_block == self.map_position:
                 player_distance_vertical = v_depth
@@ -198,7 +200,10 @@ class NPC(AnimatedSprite):
             v_intersection_coord_y += delta_y
             v_depth += delta_depth
 
-        player_distance = max(player_distance_horizontal, player_distance_vertical)
+        player_distance = max(
+            player_distance_horizontal,
+            player_distance_vertical
+        )
         wall_distance = max(wall_distance_horizontal, wall_distance_vertical)
 
         if 0 < player_distance < wall_distance or not wall_distance:
@@ -207,7 +212,9 @@ class NPC(AnimatedSprite):
 
     def draw_ray_cast(self):
         pg.draw.circle(
-            self.game.screen, "red", (PIXEL_SIZE * self.x, PIXEL_SIZE * self.y), 15
+            self.game.screen, "red",
+            (PIXEL_SIZE * self.x, PIXEL_SIZE * self.y),
+            15
         )
 
         if self.ray_cast_player_npc():

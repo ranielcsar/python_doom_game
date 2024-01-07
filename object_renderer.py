@@ -19,7 +19,8 @@ class ObjectRenderer:
         self.health_digit_size = 90
         self.health_digit_images = [
             self.get_texture(
-                f"resources/textures/digits/{i}.png", [self.health_digit_size] * 2
+                f"resources/textures/digits/{i}.png", [
+                    self.health_digit_size] * 2
             )
             for i in range(digits_len)
         ]
@@ -65,7 +66,9 @@ class ObjectRenderer:
 
     def render_game_objects(self):
         objects_list = sorted(
-            self.game.raycasting.objects_to_render, key=lambda t: t[0], reverse=True
+            self.game.raycasting.objects_to_render,
+            key=lambda t: t[0],
+            reverse=True
         )
 
         for _, image, position in objects_list:
