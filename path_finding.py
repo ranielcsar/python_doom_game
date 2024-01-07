@@ -1,5 +1,9 @@
 from collections import deque
+from typing import Dict, Tuple
 from game_types import GameType
+
+TupleType = Tuple[int, int]
+DictTupleType = Dict[TupleType, TupleType]
 
 
 class PathFinding:
@@ -16,11 +20,11 @@ class PathFinding:
             [1, 1],
             [-1, 1],
         )
-        self.graph = {}
+        self.graph: DictTupleType = {}
         self.get_graph()
-        self.visited = {}
+        self.visited: DictTupleType = {}
 
-    def get_path(self, start, goal):
+    def get_path(self, start: TupleType, goal: TupleType) -> TupleType:
         self.visited = self.breadth_first_search(start, goal, self.graph)
         path = [goal]
         step = self.visited.get(goal, start)
@@ -31,7 +35,12 @@ class PathFinding:
 
         return path[-1]
 
-    def breadth_first_search(self, start, goal, graph):
+    def breadth_first_search(
+        self,
+        start: TupleType,
+        goal: TupleType,
+        graph: DictTupleType,
+    ):
         queue = deque([start])
         visited = {start: None}
 

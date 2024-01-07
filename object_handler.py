@@ -12,7 +12,7 @@ class ObjectHandler:
         self.animated_sprite_path = "resources/sprites/animated_sprites/"
         add_sprite = self.add_sprite
         add_npc = self.add_npc
-        self.npc_positions = {}
+        self.npc_positions: set[Tuple[int, int]] = {}
 
         # sprites
         add_sprite(AnimatedSprite(game))
@@ -20,8 +20,8 @@ class ObjectHandler:
 
         # npc
         add_npc(NPC(game))
-        add_npc(NPC(game))
-        add_npc(NPC(game))
+        add_npc(NPC(game, position=(12.5, 7.5)))
+        add_npc(NPC(game, position=(13.5, 4.5)))
 
     def add_sprite(self, sprite):
         self.sprite_list.append(sprite)

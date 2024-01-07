@@ -55,7 +55,7 @@ class ObjectRenderer:
 
     def draw_background(self):
         self.sky_offset = (
-            self.sky_offset + 4.0 * self.game.player.relative_movement
+            self.sky_offset + 4.0 * self.game.player.relative_mouse_movement
         ) % WIDTH
         self.screen.blit(self.sky_image, (-self.sky_offset, 0))
         self.screen.blit(self.sky_image, (-self.sky_offset + WIDTH, 0))
@@ -68,7 +68,7 @@ class ObjectRenderer:
             self.game.raycasting.objects_to_render, key=lambda t: t[0], reverse=True
         )
 
-        for depth, image, position in objects_list:
+        for _, image, position in objects_list:
             self.screen.blit(image, position)
 
     @staticmethod

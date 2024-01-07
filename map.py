@@ -1,5 +1,5 @@
 import pygame as pg
-from game_types import GameType
+from game_types import GameType, MiniMapType, WorldMapType
 from settings import PIXEL_SIZE
 
 _ = False
@@ -19,8 +19,8 @@ mini_map = [
 class Map:
     def __init__(self, game: GameType):
         self.game = game
-        self.mini_map = mini_map
-        self.world_map = {}
+        self.mini_map: MiniMapType = mini_map
+        self.world_map: WorldMapType = {}
         self.get_map()
 
     def get_map(self):

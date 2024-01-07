@@ -9,7 +9,7 @@ class Player:
         self.game = game
         self.x, self.y = PLAYER_POSITION
         self.angle = PLAYER_ANGLE
-        self.relative_movement = 0
+        self.relative_mouse_movement = 0
         self.shot = False
         self.health = PLAYER_MAX_HEALTH
         self.health_recovery_delay = 700
@@ -83,17 +83,19 @@ class Player:
             self.y += delta_y
 
     def mouse_control(self):
-        mouse_x, mouse_y = pg.mouse.get_pos()
+        mouse_x, _ = pg.mouse.get_pos()
 
         if mouse_x < MOUSE_BORDER_LEFT or mouse_x > MOUSE_BORDER_RIGHT:
             pg.mouse.set_pos([HALF_WIDTH, HALF_HEIGHT])
 
-        self.relative_movement = pg.mouse.get_rel()[0]
-        self.relative_movement = max(
+        self.relative_mouse_movement = pg.mouse.get_rel()[0]
+        self.relative_mouse_movement = max(
             -MOUSE_MAX_RELATIVE_MOVEMENT,
-            min(MOUSE_MAX_RELATIVE_MOVEMENT, self.relative_movement),
+            min(MOUSE_MAX_RELATIVE_MOVEMENT, self.relative_mouse_movement),
         )
-        self.angle += self.relative_movement * MOUSE_SENSITIVITY * self.game.delta_time
+        self.angle += (
+            self.relative_mouse_movement * MOUSE_SENSITIVITY * self.game.delta_time
+        )
 
     def draw(self):
         # pg.draw.line(
@@ -122,4 +124,4 @@ class Player:
 
     @property
     def map_position(self):
-        return int(self.x), int(self.y)
+        return (int(self.x), int(self.y))

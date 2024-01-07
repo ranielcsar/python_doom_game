@@ -1,6 +1,7 @@
+from typing import Tuple
 import pygame as pg
 from settings import *
-from game_types import GameType
+from game_types import GameType, ImagesType
 import math
 import os
 from collections import deque
@@ -11,7 +12,7 @@ class SpriteObject:
         self,
         game: GameType,
         path="resources/sprites/static_sprites/candlebra.png",
-        position=(10.5, 3.5),
+        position: Tuple[float, float] = (10.5, 3.5),
         scale=0.7,
         shift=0.27,
     ):
@@ -84,7 +85,7 @@ class AnimatedSprite(SpriteObject):
         self,
         game: GameType,
         path="resources/sprites/animated_sprites/green_light/0.png",
-        position=(11.5, 3.5),
+        position: Tuple[float, float] = (11.5, 3.5),
         scale=0.7,
         shift=0.27,
         animation_time=120,
@@ -92,7 +93,7 @@ class AnimatedSprite(SpriteObject):
         super().__init__(game, path, position, scale, shift)
         self.animation_time = animation_time
         self.path = path.rsplit("/", 1)[0]
-        self.images = self.get_images(self.path)
+        self.images: ImagesType = self.get_images(self.path)
         self.previous_animation_time = pg.time.get_ticks()
         self.animation_trigger = False
 

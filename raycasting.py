@@ -1,14 +1,14 @@
 import pygame as pg
 import math
 from settings import *
-from game_types import GameType
+from game_types import GameType, ObjectsToRenderType, RayCastResultType
 
 
 class RayCasting:
     def __init__(self, game: GameType):
         self.game = game
-        self.ray_casting_result = []
-        self.objects_to_render = []
+        self.ray_casting_result: RayCastResultType = []
+        self.objects_to_render: ObjectsToRenderType = []
         self.textures = self.game.object_renderer.wall_textures
 
     def get_objects_to_render(self):
@@ -46,7 +46,7 @@ class RayCasting:
         texture_horizontal, texture_vertical = 1, 1
 
         ray_angle = self.game.player.angle - HALF_FIELD_OF_VIEW + 0.0001
-        for ray in range(NUM_RAYS):
+        for _ in range(NUM_RAYS):
             sin_a = math.sin(ray_angle)
             cos_a = math.cos(ray_angle)
 

@@ -1,9 +1,15 @@
-from typing import TypeVar, TYPE_CHECKING
+from typing import Deque, Dict, Literal, Tuple, TypeVar, TYPE_CHECKING, Union
+
+from pygame import Surface
 
 if TYPE_CHECKING:
     from main import Game
-    from sprite_object import *
 
 GameType = TypeVar("GameType", bound="Game")
-AnimatedSpriteType = TypeVar("AnimatedSpriteType", bound="AnimatedSprite")
-SpriteObjectType = TypeVar("SpriteObjectType", bound="SpriteObject")
+MiniMapType = list[Union[bool, int]]
+WorldMapType = Dict[Tuple[int, int], int]
+ImagesType = Deque[Surface]
+RayCastResultType = list[Tuple[float, float, int, float]]
+ObjectsToRenderType = list[
+    Tuple[float, Surface, tuple[int, float] | tuple[int, Literal[0]]]
+]

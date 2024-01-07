@@ -1,5 +1,6 @@
+from typing import Tuple
 from sprite_object import *
-from random import randint, random, choice
+from random import randint, random
 import pygame as pg
 
 
@@ -8,18 +9,18 @@ class NPC(AnimatedSprite):
         self,
         game: GameType,
         path="resources/sprites/npc/soldier/0.png",
-        position=(10.5, 5.5),
+        position: Tuple[float, float] = (10.5, 5.5),
         scale=0.6,
         shift=0.38,
         animation_time=180,
     ):
         super().__init__(game, path, position, scale, shift, animation_time)
 
-        self.attack_images = self.get_images(self.path + "/attack")
-        self.death_images = self.get_images(self.path + "/death")
-        self.idle_images = self.get_images(self.path + "/idle")
-        self.pain_images = self.get_images(self.path + "/pain")
-        self.walk_images = self.get_images(self.path + "/walk")
+        self.attack_images: ImagesType = self.get_images(self.path + "/attack")
+        self.death_images: ImagesType = self.get_images(self.path + "/death")
+        self.idle_images: ImagesType = self.get_images(self.path + "/idle")
+        self.pain_images: ImagesType = self.get_images(self.path + "/pain")
+        self.walk_images: ImagesType = self.get_images(self.path + "/walk")
 
         self.attack_distance = randint(3, 6)
         self.speed = 0.03
@@ -39,17 +40,17 @@ class NPC(AnimatedSprite):
         self.run_logic()
         # self.draw_ray_cast()
 
-    def check_wall(self, x, y):
+    def check_wall(self, x: int, y: int):
         return (x, y) not in self.game.map.world_map
 
-    def check_wall_collision(self, delta_x, delta_y):
+    def check_wall_collision(self, delta_x: float, delta_y: float):
         if self.check_wall(int(self.x + delta_x * self.size), int(self.y)):
             self.x += delta_x
         if self.check_wall(int(self.x), int(self.y + delta_y * self.size)):
             self.y += delta_y
 
     def movement(self):
-        next_position = self.game.path_finding.get_path(
+        next_position: Tuple[int, int] = self.game.path_finding.get_path(
             self.map_position, self.game.player.map_position
         )
         next_x, next_y = next_position
@@ -129,10 +130,10 @@ class NPC(AnimatedSprite):
             self.animate_death()
 
     @property
-    def map_position(self):
+    def map_position(self) -> Tuple[int, int]:
         return (int(self.x), int(self.y))
 
-    def ray_cast_player_npc(self):
+    def ray_cast_player_npc(self) -> bool:
         if self.game.player.position == self.map_position:
             return True
 
